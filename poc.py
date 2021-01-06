@@ -49,13 +49,15 @@ def get_schedule():
         sections = raw_game.parent.parent.find_all('td', attrs={'class': 'Table__TD'})
         raw_game_span = raw_game.find_all('span')
         opp_team_url = raw_game_span[-1].find('a')['href'].split('/')
+        game_a = sections[2].find('a')
         schedule.append({
             'location': 'Home' if raw_game_span[0].get_text() == 'vs' else 'Away',
             'opponent': {
                 'name': raw_game_span[-1].get_text().strip(),
                 'id': opp_team_url[opp_team_url.index('id') + 1]
             },
-            'date': sections[0].get_text()
+            'date': sections[0].get_text(),
+            'id': game_a['href'].split('=')[1] if game_a else -1
         })
     
     if VERBOSE:
